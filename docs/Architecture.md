@@ -8,7 +8,9 @@
 
 ## System Architecture — Visual Overview
 
-![RAG Pipeline Architecture — End-to-end system diagram showing all 10 stages: Scheduler, Scraper, Normalizer, Change Detector, Chunker, Embedder, Upserter, Retriever, Generator, and Evaluator, along with the Storage Layer, Data Sources, and Configuration & Experimentation framework.](d:/GenAI/Practice/RAG_UC/docs/rag_pipeline_architecture.jpg)
+> **Note:** The original static architectural diagram (`rag_pipeline_architecture.jpg`) has been deprecated in favor of the dynamic Mermaid diagram below, which accurately reflects the latest implementation updates (such as GitHub Actions scheduling, the correct 9 funds, and current embedding options).
+
+Please see [Section 2: High-Level System Diagram](#2-high-level-system-diagram) below.
 
 ---
 
@@ -42,7 +44,7 @@ The system is a **local, single-user RAG pipeline** built for learning. It is co
 | Path | Trigger | Purpose |
 |------|---------|---------|
 | **Ingestion Pipeline** | GitHub Actions (cron/manual) | Scrape → Normalize → Detect Changes → Chunk → Embed → Upsert |
-| **Query Pipeline** | User question (interactive) | Embed Query → Retrieve → Generate → Respond |
+| **Query Pipeline** | User question (interactive/Web UI) | Web UI → API → Embed Query → Retrieve → Generate → Respond |
 
 Both paths are orchestrated by a lightweight **Pipeline Orchestrator** that manages configuration, logging, and component wiring.
 
@@ -63,38 +65,54 @@ Both paths are orchestrated by a lightweight **Pipeline Orchestrator** that mana
 ```mermaid
 graph TB
     subgraph Scheduling["⏰ Scheduling Layer"]
-        SCHED["GitHub Actions<br/>(cron / workflow_dispatch)"]
+        SCHED["GitHub Actions<br/>(cron: 0 */12 * * * / manual)"]
+    end
+
+    subgraph DataSources["🌐 Data Source: 9 HDFC Groww Funds"]
+        F1["Small Cap"]
+        F2["Mid Cap"]
+        F3["Flexi Cap"]
+        F4["Multi Cap"]
+        F5["Gold FoF"]
+        F6["Large & Mid Cap"]
+        F7["Index"]
+        F8["ELSS Tax Saver"]
+        F9["Large Cap"]
     end
 
     subgraph Ingestion["📥 Ingestion Pipeline"]
-        SCRAPE["🌐 Scraper<br/>9 Groww URLs"]
-        NORM["🧹 Normalizer<br/>Clean → Structured JSON"]
-        CD["🔍 Change Detector<br/>Hash comparison"]
-        CHUNK["✂️ Chunker<br/>Section-aware / Fixed-size"]
-        EMBED_I["🧠 Embedder<br/>(pluggable model)"]
-        UPSERT["💾 Upserter<br/>Vector DB write"]
+        SCRAPE["Stage 1: Scraper<br/>Extracts: NAV, Returns, AUM,<br/>Holdings, Exit Load, Manager"]
+        NORM["Stage 2: Normalizer<br/>Clean → Structured JSON"]
+        CD["Stage 3: Change Detector<br/>Hash comparison"]
+        CHUNK["Stage 4: Chunker<br/>Section-aware / Fixed-size"]
+        EMBED_I["Stage 5: Embedder<br/>gemini / all-MiniLM / openai"]
+        UPSERT["Stage 6: Upserter<br/>Vector DB write"]
     end
 
     subgraph Storage["🗄️ Storage Layer"]
-        VSTORE[("Vector Store<br/>(pluggable)")]
-        HASHDB[("Hash Store<br/>(JSON / SQLite)")]
-        RAWJSON[("Normalized JSON<br/>per fund")]
-        RAWDATA[("Raw Scraped Data<br/>per fund")]
-        LOGS[("Run Logs<br/>scheduler history")]
+        VSTORE[("Vector Store<br/>Chroma / FAISS")]
+        HASHDB[("Hash Store<br/>(JSON)")]
+        RAWJSON[("Normalized Data<br/>(JSON)")]
+        RAWDATA[("Raw Data<br/>(HTML/Text)")]
+        LOGS[("Log Store<br/>Run Logs")]
     end
 
     subgraph Query["❓ Query Pipeline"]
+        WEBUI["Web Frontend<br/>(Next.js)"]
+        API["REST API<br/>(FastAPI)"]
         INPUT["User Question"]
-        EMBED_Q["🧠 Query Embedder"]
-        RETRIEVE["🔎 Retriever<br/>top-k + threshold"]
-        GENERATE["💬 Generator<br/>Grounded LLM"]
-        RESPONSE["📝 Answer<br/>+ source + timestamp"]
+        EMBED_Q["Query Embedder"]
+        RETRIEVE["Stage 7: Retriever<br/>top-k + threshold + hybrid"]
+        GENERATE["Stage 8: Generator<br/>Grounded LLM (Groq/Gemini)"]
+        RESPONSE["Answer<br/>+ source + timestamp"]
+        EVAL["Stage 9: Evaluator<br/>Test Questions & Accuracy"]
     end
 
-    subgraph Config["⚙️ Configuration"]
-        CONF["config.yaml<br/>models, DB, intervals,<br/>chunk params"]
+    subgraph Config["⚙️ Configuration & Experimentation"]
+        CONF["config.yaml<br/>Models, DB, Intervals, Chunk Params"]
     end
 
+    DataSources --> SCRAPE
     SCHED -->|triggers| SCRAPE
     SCRAPE --> NORM --> CD
     CD -->|changed sections| CHUNK
@@ -105,9 +123,12 @@ graph TB
     CHUNK --> EMBED_I --> UPSERT
     UPSERT <--> VSTORE
 
+    WEBUI <--> API
+    API <--> INPUT
     INPUT --> EMBED_Q --> RETRIEVE
     RETRIEVE <-->|query| VSTORE
     RETRIEVE --> GENERATE --> RESPONSE
+    RESPONSE -.-> EVAL
 
     CONF -.->|configures| SCHED
     CONF -.->|configures| SCRAPE
@@ -125,6 +146,7 @@ graph TB
     style Storage fill:#0f3460,stroke:#533483,color:#fff
     style Query fill:#533483,stroke:#e94560,color:#fff
     style Config fill:#2d4059,stroke:#ea5455,color:#fff
+    style DataSources fill:#2d4059,stroke:#e94560,color:#fff
     style SKIP fill:#2d4059,stroke:#ea5455,color:#fff
 ```
 
@@ -454,6 +476,19 @@ See [§10 Scheduler & Freshness Design](#10-scheduler--freshness-design) for det
 | **Input** | List of test questions with expected answer patterns / expected sources. |
 | **Output** | Evaluation report: per-question result (correct / incorrect / correctly declined), retrieval metrics (chunks retrieved, scores), and overall accuracy. |
 | **Scheduler verification** | Includes tests that re-ask questions after a scheduled refresh to confirm updated values propagate _(SC6)_. |
+
+---
+
+### 3.11 Web Frontend & API (`api` & `frontend`)
+
+> **Maps to:** FR5, L7
+
+| Aspect | Detail |
+|--------|--------|
+| **Responsibility** | Provide a user-friendly, browser-based interface for interacting with the RAG pipeline. |
+| **Backend API (FastAPI)** | Wraps the query pipeline (Retriever + Generator) in a RESTful POST endpoint (`/api/query`). |
+| **Frontend UI (Next.js)** | A React-based chat interface. Displays user queries, LLM answers, and formatted citations. |
+| **Communication** | Frontend calls FastAPI via JSON HTTP requests. |
 
 ---
 
@@ -813,12 +848,16 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
     participant U as User
+    participant W as Web UI (Next.js)
+    participant A as API (FastAPI)
     participant R as Retriever
     participant E as Embedder
     participant VS as Vector Store
     participant G as Generator
 
-    U->>R: Natural language question
+    U->>W: Types question in chat
+    W->>A: POST /api/query {question}
+    A->>R: Process question
     R->>E: Embed question
     E-->>R: Query vector
     R->>VS: Similarity search (top-k, threshold, filters)
@@ -827,11 +866,13 @@ sequenceDiagram
     alt Relevant chunks found
         R->>G: Question + retrieved chunks
         G->>G: Generate grounded answer
-        G-->>U: Answer + source_url + last_scraped_at
+        G-->>A: Answer + citations
     else No chunks above threshold
         R->>G: Question + empty context
-        G-->>U: "This information is not available in the indexed pages."
+        G-->>A: "This information is not available in the indexed pages."
     end
+    A-->>W: JSON Response
+    W-->>U: Displays answer + citations
 ```
 
 ---

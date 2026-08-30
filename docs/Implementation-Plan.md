@@ -302,6 +302,39 @@ python-dotenv>=1.0.0
 
 ---
 
+## Phase 5.5 — Web Frontend (Next.js)
+
+> **Goal:** Expose the query pipeline via a REST API (FastAPI) and build a modern, mobile-first Web UI (Next.js) for end users.
+>
+> **Maps to:** FR5, L7
+
+### 5.5.1 Tasks — Backend API (FastAPI)
+
+| # | Task | Files | Details |
+|---|------|-------|---------|
+| 5.5.1.1 | **Create FastAPI App** | `src/api/app.py` | Initialize FastAPI app with CORS middleware. |
+| 5.5.1.2 | **Define Request/Response Models** | `src/api/models.py` | Pydantic models for `QueryRequest` (question string) and `QueryResponse` (answer, citations). |
+| 5.5.1.3 | **Implement Query Endpoint** | `src/api/routes.py` | POST `/api/query` that calls the Retriever and Generator and returns the response. |
+
+### 5.5.2 Tasks — Frontend (Next.js)
+
+| # | Task | Files | Details |
+|---|------|-------|---------|
+| 5.5.2.1 | **Initialize Next.js App** | `frontend/` | `npx create-next-app@latest frontend` with TypeScript, Tailwind CSS, App Router. |
+| 5.5.2.2 | **Build Chat UI Component** | `frontend/src/components/Chat.tsx` | A conversational interface with input field, message history, and loading states. |
+| 5.5.2.3 | **Implement API Integration** | `frontend/src/services/api.ts` | Fetch wrapper to call the FastAPI backend `/api/query` endpoint. |
+| 5.5.2.4 | **Display Citations** | `frontend/src/components/Citation.tsx` | Render source URLs and timestamps beautifully below the answers. |
+
+### 5.5.3 Milestone Checkpoint
+
+| ✅ Criterion | How to Verify |
+|-------------|---------------|
+| FastAPI runs and responds | `curl -X POST http://localhost:8000/api/query -d '{"question":"What is NAV?"}'` returns JSON. |
+| Next.js UI is accessible | Open `http://localhost:3000` in browser. |
+| End-to-end chat works | Ask a question in the UI, receive a grounded answer with citations. |
+
+---
+
 ## Phase 6 — Scheduler & Freshness
 
 > **Goal:** Automate the ingestion pipeline with a configurable scheduler and verify that updated data propagates to query answers.

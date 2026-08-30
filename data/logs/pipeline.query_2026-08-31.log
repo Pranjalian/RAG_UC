@@ -4,3 +4,4 @@
 {"timestamp": "2026-08-31 01:59:36,066", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the AUM of HDFC Small Cap Fund?"}
 {"timestamp": "2026-08-31 02:00:02,637", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the AUM of HDFC Small Cap Fund?"}
 {"timestamp": "2026-08-31 02:00:22,891", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the dividend policy for HDFC Mid Cap?"}
+{"timestamp": "2026-08-31 02:35:48,680", "name": "pipeline.query", "level": "INFO", "message": "Received query: AUM of HDFC Small Cap"}

@@ -42,6 +42,10 @@ gantt
     Generator + grounding prompts       :p5b, after p5a, 2d
     CLI / interactive interface         :p5c, after p5b, 1d
 
+    section Phase 5.5 — Web Frontend (Next.js)
+    FastAPI Backend API                 :p5_5a, after p5c, 1d
+    Next.js UI Implementation           :p5_5b, after p5_5a, 2d
+
     section Phase 6 — Scheduler & Freshness
     GitHub Actions workflow             :p6a, after p5c, 2d
     Run logging (via Actions)           :p6b, after p6a, 1d
@@ -63,6 +67,7 @@ gantt
 | **3** | Normalization & Change Detection | Clean JSON per fund + hash-based change detection | FR2, FR10 | L2, L9 |
 | **4** | Chunking, Embedding & Storage | Full ingestion pipeline: chunk → embed → upsert | FR3, FR4, FR12 | L3, L4, L5 |
 | **5** | Query Pipeline | Interactive Q&A with grounded answers + citations | FR5, FR6, FR7, FR8 | L6, L7 |
+| **5.5**| Web Frontend (Next.js) | FastAPI integration and Mobile-first Next.js UI | FR5 | L7 |
 | **6** | Scheduler & Freshness | Automated refresh + incremental re-indexing | FR9, FR10, FR11 | L8, L9 |
 | **7** | Experiments & Evaluation | Documented comparisons + evaluation report | FR12 | L3, L4, L5, L6 |
 

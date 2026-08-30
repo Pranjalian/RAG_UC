@@ -53,3 +53,42 @@
 {"timestamp": "2026-08-31 01:35:09,411", "name": "pipeline", "level": "INFO", "message": "[HDFC ELSS Tax Saver Fund] No changes detected. Skipping chunking/embedding."}
 {"timestamp": "2026-08-31 01:35:09,411", "name": "pipeline", "level": "INFO", "message": "Ingestion pipeline completed. Total chunks upserted: 0"}
 {"timestamp": "2026-08-31 01:35:09,487", "name": "pipeline", "level": "INFO", "message": "Total items in vector store: 72"}
+{"timestamp": "2026-08-31 02:05:00,874", "name": "pipeline", "level": "INFO", "message": "Starting ingestion pipeline..."}
+{"timestamp": "2026-08-31 02:05:25,859", "name": "pipeline", "level": "INFO", "message": "[HDFC Small Cap Fund] Changed sections: ['amc_details']"}
+{"timestamp": "2026-08-31 02:05:25,860", "name": "pipeline", "level": "INFO", "message": "[HDFC Small Cap Fund] Created 1 chunks."}
+{"timestamp": "2026-08-31 02:05:25,860", "name": "pipeline", "level": "INFO", "message": "[HDFC Small Cap Fund] Generating embeddings for 1 chunks..."}
+{"timestamp": "2026-08-31 02:05:26,676", "name": "pipeline", "level": "INFO", "message": "[HDFC Small Cap Fund] Upserted 1 chunks to vector store."}
+{"timestamp": "2026-08-31 02:05:26,688", "name": "pipeline", "level": "INFO", "message": "[HDFC Mid Cap Fund] Changed sections: ['amc_details']"}
+{"timestamp": "2026-08-31 02:05:26,688", "name": "pipeline", "level": "INFO", "message": "[HDFC Mid Cap Fund] Created 1 chunks."}
+{"timestamp": "2026-08-31 02:05:26,688", "name": "pipeline", "level": "INFO", "message": "[HDFC Mid Cap Fund] Generating embeddings for 1 chunks..."}
+{"timestamp": "2026-08-31 02:05:27,533", "name": "pipeline", "level": "INFO", "message": "[HDFC Mid Cap Fund] Upserted 1 chunks to vector store."}
+{"timestamp": "2026-08-31 02:05:27,545", "name": "pipeline", "level": "INFO", "message": "[HDFC Flexi Cap Fund] Changed sections: ['amc_details']"}
+{"timestamp": "2026-08-31 02:05:27,546", "name": "pipeline", "level": "INFO", "message": "[HDFC Flexi Cap Fund] Created 1 chunks."}
+{"timestamp": "2026-08-31 02:05:27,546", "name": "pipeline", "level": "INFO", "message": "[HDFC Flexi Cap Fund] Generating embeddings for 1 chunks..."}
+{"timestamp": "2026-08-31 02:05:28,241", "name": "pipeline", "level": "INFO", "message": "[HDFC Flexi Cap Fund] Upserted 1 chunks to vector store."}
+{"timestamp": "2026-08-31 02:05:28,266", "name": "pipeline", "level": "INFO", "message": "[HDFC Multi Cap Fund] Changed sections: ['amc_details']"}
+{"timestamp": "2026-08-31 02:05:28,266", "name": "pipeline", "level": "INFO", "message": "[HDFC Multi Cap Fund] Created 1 chunks."}
+{"timestamp": "2026-08-31 02:05:28,266", "name": "pipeline", "level": "INFO", "message": "[HDFC Multi Cap Fund] Generating embeddings for 1 chunks..."}
+{"timestamp": "2026-08-31 02:05:29,155", "name": "pipeline", "level": "INFO", "message": "[HDFC Multi Cap Fund] Upserted 1 chunks to vector store."}
+{"timestamp": "2026-08-31 02:05:29,160", "name": "pipeline", "level": "INFO", "message": "[HDFC Gold ETF Fund of Fund] Changed sections: ['amc_details']"}
+{"timestamp": "2026-08-31 02:05:29,161", "name": "pipeline", "level": "INFO", "message": "[HDFC Gold ETF Fund of Fund] Created 1 chunks."}
+{"timestamp": "2026-08-31 02:05:29,161", "name": "pipeline", "level": "INFO", "message": "[HDFC Gold ETF Fund of Fund] Generating embeddings for 1 chunks..."}
+{"timestamp": "2026-08-31 02:05:29,731", "name": "pipeline", "level": "INFO", "message": "[HDFC Gold ETF Fund of Fund] Upserted 1 chunks to vector store."}
+{"timestamp": "2026-08-31 02:05:29,759", "name": "pipeline", "level": "INFO", "message": "[HDFC Large and Mid Cap Fund] Changed sections: ['amc_details']"}
+{"timestamp": "2026-08-31 02:05:29,759", "name": "pipeline", "level": "INFO", "message": "[HDFC Large and Mid Cap Fund] Created 1 chunks."}
+{"timestamp": "2026-08-31 02:05:29,759", "name": "pipeline", "level": "INFO", "message": "[HDFC Large and Mid Cap Fund] Generating embeddings for 1 chunks..."}
+{"timestamp": "2026-08-31 02:05:30,596", "name": "pipeline", "level": "INFO", "message": "[HDFC Large and Mid Cap Fund] Upserted 1 chunks to vector store."}
+{"timestamp": "2026-08-31 02:05:30,610", "name": "pipeline", "level": "INFO", "message": "[HDFC Nifty 50 Index Fund] Changed sections: ['amc_details']"}
+{"timestamp": "2026-08-31 02:05:30,611", "name": "pipeline", "level": "INFO", "message": "[HDFC Nifty 50 Index Fund] Created 1 chunks."}
+{"timestamp": "2026-08-31 02:05:30,611", "name": "pipeline", "level": "INFO", "message": "[HDFC Nifty 50 Index Fund] Generating embeddings for 1 chunks..."}
+{"timestamp": "2026-08-31 02:05:31,202", "name": "pipeline", "level": "INFO", "message": "[HDFC Nifty 50 Index Fund] Upserted 1 chunks to vector store."}
+{"timestamp": "2026-08-31 02:05:31,213", "name": "pipeline", "level": "INFO", "message": "[HDFC Large Cap Fund] Changed sections: ['amc_details']"}
+{"timestamp": "2026-08-31 02:05:31,213", "name": "pipeline", "level": "INFO", "message": "[HDFC Large Cap Fund] Created 1 chunks."}
+{"timestamp": "2026-08-31 02:05:31,213", "name": "pipeline", "level": "INFO", "message": "[HDFC Large Cap Fund] Generating embeddings for 1 chunks..."}
+{"timestamp": "2026-08-31 02:05:32,012", "name": "pipeline", "level": "INFO", "message": "[HDFC Large Cap Fund] Upserted 1 chunks to vector store."}
+{"timestamp": "2026-08-31 02:05:32,021", "name": "pipeline", "level": "INFO", "message": "[HDFC ELSS Tax Saver Fund] Changed sections: ['amc_details']"}
+{"timestamp": "2026-08-31 02:05:32,021", "name": "pipeline", "level": "INFO", "message": "[HDFC ELSS Tax Saver Fund] Created 1 chunks."}
+{"timestamp": "2026-08-31 02:05:32,022", "name": "pipeline", "level": "INFO", "message": "[HDFC ELSS Tax Saver Fund] Generating embeddings for 1 chunks..."}
+{"timestamp": "2026-08-31 02:05:32,585", "name": "pipeline", "level": "INFO", "message": "[HDFC ELSS Tax Saver Fund] Upserted 1 chunks to vector store."}
+{"timestamp": "2026-08-31 02:05:32,586", "name": "pipeline", "level": "INFO", "message": "Ingestion pipeline completed. Total chunks upserted: 9"}
+{"timestamp": "2026-08-31 02:05:32,598", "name": "pipeline", "level": "INFO", "message": "Total items in vector store: 72"}

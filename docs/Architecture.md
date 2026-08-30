@@ -838,28 +838,29 @@ sequenceDiagram
 
 ## 10. Scheduler & Freshness Design
 
-### 10.1 Scheduling Modes
+### 10.1 Scheduling Mechanism (GitHub Actions)
 
-| Mode | Interval | Use Case |
-|------|----------|----------|
-| **`fast`** | Every 15 minutes | Demo mode — tracks NAV and return changes in near-real-time. |
-| **`daily`** | Every 24 hours | Stable fields — expense ratio, fund manager, holdings. |
-| **`custom`** | User-defined (seconds) | Flexible for experimentation. |
+The RAG pipeline is scheduled to run periodically using a **GitHub Actions Workflow** (`.github/workflows/schedule.yml`). This approach offloads the scheduling from the application layer to the CI/CD environment, making it robust and easy to monitor.
+
+- **Trigger**: The workflow uses the `schedule` event with a cron syntax (e.g., `0 */12 * * *` for every 12 hours) and supports manual triggers via `workflow_dispatch`.
+- **Secrets**: The workflow requires `GROQ_API_KEY` and `GOOGLE_API_KEY` as repository secrets.
+- **State Management**: After executing `python -m src.main ingest`, the workflow commits and pushes changes made to the `data/` and `vector_db/` directories back to the repository using a bot user (`github-actions[bot]`). This ensures that the next run starts with the latest data and vector index.
 
 ### 10.2 Scheduler Architecture
 
 ```mermaid
 stateDiagram-v2
-    [*] --> Idle
-    Idle --> Running: Timer fires / Manual trigger
-    Running --> Scraping: Start pipeline
+    [*] --> GitHubActions
+    GitHubActions --> Running: Cron Trigger / Manual Trigger
+    Running --> Scraping: Start pipeline (`ingest`)
     Scraping --> Normalizing
     Normalizing --> Detecting_Changes
     Detecting_Changes --> Chunking_Embedding: Changes found
     Detecting_Changes --> Logging: No changes
     Chunking_Embedding --> Upserting
     Upserting --> Logging
-    Logging --> Idle: Schedule next run
+    Logging --> CommitPush: Push to Repo
+    CommitPush --> [*]
 
     state Running {
         direction LR

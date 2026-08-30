@@ -327,7 +327,7 @@ python-dotenv>=1.0.0
 
 | ✅ Criterion | How to Verify |
 |-------------|---------------|
-| Scheduler runs on configured interval (SC5) | Start scheduler in fast mode; observe pipeline runs every 15 minutes. |
+| Scheduler runs on configured interval (SC5) | Ensure `.github/workflows/schedule.yml` is configured for the desired cron schedule (e.g. `0 */12 * * *`). |
 | Run logs are written correctly (FR11) | Inspect `data/logs/` for JSON log files. |
 | Changed content is re-indexed, unchanged is skipped (FR10) | Check per-fund log details. |
 | Updated NAV propagates to query answers (SC6) | Verify with the Q9 before/after test described above. |

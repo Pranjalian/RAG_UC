@@ -44,7 +44,12 @@ This project is a local, single-user Retrieval-Augmented Generation (RAG) pipeli
 - `python src/main.py ingest`: Runs the full ingestion pipeline (scrape -> embed -> store).
 - `python src/main.py query "Your question"`: Query the pipeline for an answer.
 - `python src/main.py query --interactive`: Start an interactive REPL loop.
-- `python src/main.py schedule --start`: Start the recurring scheduler for updates.
 - `python src/main.py evaluate`: Run evaluation test suite.
+
+## Automated Scheduling
+
+This project uses **GitHub Actions** to automatically run the ingestion pipeline every 12 hours (configurable in `.github/workflows/schedule.yml`). This ensures the index remains fresh with incremental updates (only changed content is embedded and upserted). 
+
+The GitHub Actions workflow requires `GROQ_API_KEY` and `GOOGLE_API_KEY` to be set as repository secrets. When the workflow runs, it automatically commits any newly downloaded data and vector DB changes back to the repository.
 
 For more details on the architecture and implementation, see the `docs/` folder.

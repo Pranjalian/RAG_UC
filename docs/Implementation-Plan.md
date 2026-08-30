@@ -209,8 +209,8 @@ python-dotenv>=1.0.0
 | # | Task | Files | Details |
 |---|------|-------|---------|
 | 4.1.1 | **Define `Chunk` dataclass** | `src/chunker/chunker.py` | Per [Architecture §3.4](file:///d:/GenAI/Practice/RAG_UC/docs/Architecture.md): `chunk_id`, `fund_id`, `fund_name`, `section`, `text`, `source_url`, `last_scraped_at`, `chunk_index`, `strategy`. |
-| 4.1.2 | **Implement section-aware chunking** | `src/chunker/section_aware.py` | Each canonical section → 1 chunk. If section text exceeds `config.chunker.section_aware.max_chunk_size`, split into sub-chunks with overlap. Assign stable chunk IDs: `{fund_id}::{section}::{index}`. |
-| 4.1.3 | **Implement fixed-size chunking** | `src/chunker/fixed_size.py` | Split all normalized text into chunks of `config.chunker.fixed_size.chunk_size` characters with `chunk_overlap` overlap. Assign sequential IDs. |
+| 4.1.2 | **Implement section-aware markdown chunking** | `src/chunker/section_aware.py` | Convert each JSON section to a Markdown template (e.g. tables for returns/holdings). Batch long lists like holdings (e.g., 25 items per chunk). Assign stable chunk IDs: `{fund_id}::{section}::{index}`. |
+| 4.1.3 | **Implement fixed-size string chunking** | `src/chunker/fixed_size.py` | Split the raw JSON string into chunks of `config.chunker.fixed_size.chunk_size` characters with `chunk_overlap` overlap. Assign sequential IDs. |
 | 4.1.4 | **Implement chunker orchestration** | `src/chunker/chunker.py` | Factory function: read `config.chunker.strategy` and route to the appropriate strategy. |
 | 4.1.5 | **Test chunking output** | _(manual test)_ | Run chunker on 2–3 normalized funds. Verify chunk IDs are stable, chunk text is semantically coherent, and metadata is populated. |
 
@@ -262,9 +262,9 @@ python-dotenv>=1.0.0
 
 | # | Task | Files | Details |
 |---|------|-------|---------|
-| 5.1.1 | **Implement retriever module** | `src/retriever/retriever.py` | Accept a question string. Use the embedder to generate a query vector. Call `vector_store.search()` with `config.retriever.top_k` and `config.retriever.similarity_threshold`. Return ranked `SearchResult` list. |
-| 5.1.2 | **Implement threshold filtering** | `src/retriever/retriever.py` | Discard results below `config.retriever.similarity_threshold`. If all results are below threshold, return empty list (triggers "not found" in generator). |
-| 5.1.3 | **_(Optional)_ Implement hybrid search** | `src/retriever/retriever.py` | If `config.retriever.hybrid.enabled`, additionally run a keyword/BM25 search, merge results using RRF or weighted combination, then apply threshold. |
+| 5.1.1 | **Implement query router (Self-Querying)** | `src/retriever/router.py` | Use a fast LLM (e.g., Llama3-8b via Groq) with structured JSON output to extract `fund_id` and `section` filters from the user's natural language question. |
+| 5.1.2 | **Implement retriever module** | `src/retriever/retriever.py` | Accept a question string. 1) Call router for filters. 2) Embed question. 3) Call `vector_store.search()` with `config.retriever.top_k`, threshold, and extracted metadata filters. Return ranked `SearchResult` list. |
+| 5.1.3 | **Implement threshold filtering** | `src/retriever/retriever.py` | Discard results below `config.retriever.similarity_threshold`. If all results are below threshold, return empty list (triggers "not found" in generator). |
 | 5.1.4 | **Test retrieval with sample questions** | _(manual test)_ | Query with 3–4 sample questions from [ProblemStatement §8](file:///d:/GenAI/Practice/RAG_UC/docs/ProblemStatement.md). Verify retrieved chunks are from the correct fund and correct section. |
 
 ### 5.2 Tasks — Generator
@@ -273,9 +273,10 @@ python-dotenv>=1.0.0
 |---|------|-------|---------|
 | 5.2.1 | **Create system prompt template** | `src/generator/prompts.py` | Grounded Q&A prompt per [Architecture §3.8](file:///d:/GenAI/Practice/RAG_UC/docs/Architecture.md): answer only from context, cite source URL + timestamp, say "not available" when info is absent, no investment advice. |
 | 5.2.2 | **Implement generator module** | `src/generator/generator.py` | Accept question + retrieved chunks. Format chunks into context string. Call the LLM (Groq via `groq` Python SDK) with system prompt + context + question. Parse and return the response. |
-| 5.2.3 | **Implement "not found" handling** | `src/generator/generator.py` | If no chunks were retrieved (empty context), return the standard not-found message without calling the LLM (to save cost). |
-| 5.2.4 | **Implement citation formatting** | `src/generator/generator.py` | Ensure every answer includes `[Source: <url>, Data as of: <timestamp>]` from the chunk metadata. |
-| 5.2.5 | **Test generation with sample questions** | _(manual test)_ | Run 5 questions from the test set. Verify: (a) answers are factually grounded in chunk content, (b) citations are present and correct, (c) Q10 ("dividend policy") triggers a "not found" response. |
+| 5.2.3 | **Implement rate limit handling** | `src/generator/generator.py` | Groq Free Tier has strict limits (30 RPM, 8K TPM). Catch `429 Too Many Requests` (RateLimitError) and implement exponential backoff or graceful degradation. |
+| 5.2.4 | **Implement "not found" handling** | `src/generator/generator.py` | If no chunks were retrieved (empty context), return the standard not-found message without calling the LLM (to save cost). |
+| 5.2.5 | **Implement citation formatting** | `src/generator/generator.py` | Ensure every answer includes `[Source: <url>, Data as of: <timestamp>]` from the chunk metadata. |
+| 5.2.6 | **Test generation with sample questions** | _(manual test)_ | Run 5 questions from the test set. Verify: (a) answers are factually grounded in chunk content, (b) citations are present and correct, (c) Q10 ("dividend policy") triggers a "not found" response. |
 
 ### 5.3 Tasks — Interactive Interface
 

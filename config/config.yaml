@@ -31,7 +31,7 @@ chunker:
 embedder:
   provider: "gemini"                  # "gemini" | "sentence_transformer" | "openai"
   gemini:
-    model: "text-embedding-004"
+    model: "gemini-embedding-2"
     batch_size: 32
   sentence_transformer:
     model: "all-MiniLM-L6-v2"
@@ -52,11 +52,12 @@ vector_store:
 
 # ─── Retriever ──────────────────────────────────────────
 retriever:
-  top_k: 5
-  similarity_threshold: 0.65         # Discard chunks below this score
-  hybrid:
-    enabled: false                   # Enable keyword+vector hybrid search
-    keyword_weight: 0.3              # Weight for keyword (BM25) component
+  top_k: 2
+  similarity_threshold: 0.65
+  self_query:
+    enabled: true
+    llm_provider: "groq"
+    model: "openai/gpt-oss-120b"
 
 # ─── Generator ──────────────────────────────────────────
 generator:

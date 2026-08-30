@@ -391,11 +391,11 @@ class SearchResult:
 
 | Aspect | Detail |
 |--------|--------|
-| **Responsibility** | Given a user query, find the most relevant chunks from the vector store. |
+| **Responsibility** | Given a user query, find the most relevant chunks from the vector store using Self-Querying (Metadata extraction). |
 | **Input** | Natural-language question string. |
 | **Output** | Ranked list of `SearchResult` chunks to pass to the generator. |
-| **Steps** | 1) Embed the query via the Embedder. 2) Run vector similarity search. 3) Optionally run keyword/BM25 search and merge (hybrid). 4) Apply score threshold filtering. 5) Return top-k results. |
-| **Tunable parameters** | `top_k`, `similarity_threshold`, `hybrid_weight` (all from config) _(L6)_. |
+| **Steps** | 1) Extract metadata filters (`fund_id`, `section`) from query using a lightweight LLM router. 2) Embed the query. 3) Run vector similarity search applying the metadata filters (`where` clause). 4) Apply score threshold filtering. 5) Return top-k results. |
+| **Tunable parameters** | `top_k`, `similarity_threshold`, `self_query.enabled` (all from config) _(L6)_. |
 
 ---
 
@@ -410,7 +410,7 @@ class SearchResult:
 | **Output** | Answer text + source URL(s) + last-scraped timestamp(s). |
 | **Grounding rule** | Answer **only** from the provided chunks. If the information is not present, respond with _"This information is not available in the indexed pages."_ _(FR7, L7)_. |
 | **Citation** | Every answer must cite the `source_url` and `last_scraped_at` of the data it used _(FR8)_. |
-| **LLM** | Configurable LLM backend (e.g. Groq, OpenAI, local model). |
+| **LLM / Constraints** | Configurable LLM backend (e.g. Groq, OpenAI, local model). **Constraint:** Groq Free Tier has strict limits (30 RPM, 8K TPM, 1K RPD). Context size (`top_k`) must be kept small (e.g. 1-3) to avoid hitting the 8K TPM limit during retrieval. |
 
 #### System Prompt Template (Conceptual)
 
@@ -735,9 +735,10 @@ vector_store:
 retriever:
   top_k: 5
   similarity_threshold: 0.65         # Discard chunks below this score
-  hybrid:
-    enabled: false                   # Enable keyword+vector hybrid search
-    keyword_weight: 0.3              # Weight for keyword (BM25) component
+  self_query:
+    enabled: true                    # Enable LLM-based metadata extraction for pre-filtering
+    llm_provider: "groq"
+    model: "llama3-8b-8192"          # Fast, lightweight model for routing
 
 # ─── Generator ──────────────────────────────────────────
 generator:
@@ -925,39 +926,44 @@ flowchart LR
 
 ## 12. Chunking Strategies
 
+Given the highly structured and nested nature of the normalized JSON data (e.g., lists of dicts for holdings, nested metrics for returns), raw text or recursive character splitting on the JSON strings would result in a loss of semantic context. 
+
 Two strategies will be implemented and compared _(L3)_:
 
-### 12.1 Section-Aware Chunking (Primary)
+### 12.1 Section-Aware Markdown Chunking (Primary)
 
-Each canonical section becomes one chunk (or a few if it exceeds `max_chunk_size`).
+This strategy first converts each canonical JSON section into a **natural language or Markdown template** before chunking and embedding. This guarantees the LLM receives highly readable, tabular, or conversational context.
 
 | Pros | Cons |
 |------|------|
-| Semantically coherent — each chunk is about one topic | Some sections may be very short (under-utilized embedding space) |
-| Stable chunk IDs (section-based) make upserts clean | Section length varies significantly across funds |
-| Better precision for single-fact questions | |
+| **Semantic Clarity:** Tables and lists are easily understood by the embedder. | Requires maintaining specific markdown templates for each section type. |
+| **Stable chunk IDs:** (section-based) make upserts clean. | |
+| **Context Density:** Batching lists (like holdings) avoids exceeding context limits while keeping items grouped logically. | |
+
+**Chunk Generation Rules:**
+- **`overview`**: Converted into a natural language paragraph or key-value list.
+- **`returns`**: Formatted as a Markdown table comparing 1Y, 3Y, 5Y returns and category averages.
+- **`fund_managers`**: Formatted as text paragraphs per manager.
+- **`holdings`**: Formatted as Markdown lists or tables. Because funds can have 80+ holdings, this list is **batched** (e.g., chunks of 25 holdings) to prevent giant embeddings.
 
 **Chunk boundary example:**
-```
-Chunk: "hdfc_small_cap::overview::0"
-Content: "HDFC Small Cap Fund | NAV: ₹98.45 | AUM: ₹33,250 Cr | 
-          Expense Ratio: 0.68% | Risk: Very High | Category: Small Cap | 
-          Rating: 4 stars | Benchmark: NIFTY Smallcap 250 TRI | 
-          Min SIP: ₹500 | Min Lumpsum: ₹5,000 | Launch: 2008-02-19"
-
-Chunk: "hdfc_small_cap::holdings::0"
-Content: "Top Holdings: Stock A (Technology, 3.2%), Stock B (Financials, 2.8%), ..."
+```text
+Chunk ID: "hdfc_small_cap::holdings::0"
+Content: "Holdings for HDFC Small Cap Fund (Part 1):
+| Company | Sector | Instrument | % Assets |
+|---------|--------|------------|----------|
+| Firstsource Solutions | Industrials | Equity | 4.24% |
+| Aster DM Healthcare | Healthcare | Equity | 3.89% |..."
 ```
 
-### 12.2 Fixed-Size Chunking (Alternative)
+### 12.2 Fixed-Size String Chunking (Alternative)
 
-Content is split into chunks of a fixed character/token count with overlap.
+The entire normalized JSON record is dumped as a string, and split into chunks of a fixed character/token count with overlap.
 
 | Pros | Cons |
 |------|------|
-| Simple, uniform chunk sizes | Chunks may span section boundaries (semantic leakage) |
-| Works without domain knowledge | Harder to maintain stable chunk IDs across re-indexing |
-| | May split a table row across two chunks |
+| Simple, uniform chunk sizes. | High semantic leakage: A chunk might contain `"return1y": 1.6` but miss the context of which fund or metric category it belongs to. |
+| Works without domain knowledge. | Harder to maintain stable chunk IDs across re-indexing. |
 
 **Parameters:**
 - `chunk_size`: 500 characters (configurable)

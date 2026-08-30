@@ -2,6 +2,9 @@ import argparse
 import sys
 from src.config_loader import load_config
 from src.logger import setup_logger
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def main():
     parser = argparse.ArgumentParser(description="Mutual Fund FAQ Assistant - RAG Pipeline CLI")
@@ -45,49 +48,27 @@ def main():
     elif args.command == "ingest":
         logger.info("Executing 'ingest' command...")
         
-        from src.scraper.scraper import Scraper
-        from src.normalizer.normalizer import Normalizer
-        from src.change_detector.detector import ChangeDetector
-        import dataclasses
-        
-        scraper = Scraper(config.get("scraper", {}))
-        normalizer = Normalizer(config.get("normalizer", {}))
-        detector = ChangeDetector(config.get("change_detector", {}))
-        
-        # Scrape all configured funds
-        results = scraper.scrape_all()
-        
-        # Normalize and Detect Changes
-        for res in results:
-            if not res.success:
-                logger.warning(f"Skipping {res.fund_name} due to scrape failure.")
-                continue
-                
-            raw_data = dataclasses.asdict(res)
-            normalized = normalizer.normalize_fund(raw_data)
-            normalizer.persist_normalized(normalized)
-            
-            manifest, current_hashes = detector.detect_changes(normalized)
-            
-            changed_sections = [sec for sec, status in manifest.items() if status == "changed"]
-            logger.info(f"[{res.fund_name}] Changed sections: {changed_sections}")
-            
-            # Save hashes right away for Phase 3
-            detector.save_hashes(normalized.fund_id, current_hashes)
-            
-        print("Ingestion up to Change Detection completed.")
+        from src.pipeline import IngestionPipeline
+        pipeline = IngestionPipeline(config)
+        pipeline.run()
     elif args.command == "query":
         logger.info("Executing 'query' command...")
+        from src.pipeline import QueryPipeline
+        pipeline = QueryPipeline(config)
+        
         if args.interactive:
             print("Entering interactive mode. Type 'exit' to quit.")
             while True:
                 q = input("Question: ")
                 if q.strip().lower() in ["exit", "quit"]:
                     break
-                print(f"Answering: {q} (Not implemented)")
+                answer = pipeline.query(q)
+                print(f"\nAnswer:\n{answer}\n")
+                print("-" * 50)
         elif args.question:
             print(f"Question: {args.question}")
-            print("Answering... (Not implemented)")
+            answer = pipeline.query(args.question)
+            print(f"\nAnswer:\n{answer}\n")
         else:
             query_parser.print_help()
             

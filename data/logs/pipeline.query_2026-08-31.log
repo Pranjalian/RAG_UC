@@ -5,3 +5,54 @@
 {"timestamp": "2026-08-31 02:00:02,637", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the AUM of HDFC Small Cap Fund?"}
 {"timestamp": "2026-08-31 02:00:22,891", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the dividend policy for HDFC Mid Cap?"}
 {"timestamp": "2026-08-31 02:35:48,680", "name": "pipeline.query", "level": "INFO", "message": "Received query: AUM of HDFC Small Cap"}
+{"timestamp": "2026-08-31 03:17:34,316", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the minimum SIP amount for HDFC Mid Cap Fund?"}
+{"timestamp": "2026-08-31 03:17:36,754", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the expense ratio of HDFC Nifty 50 Index Fund?"}
+{"timestamp": "2026-08-31 03:17:37,453", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the exit load for HDFC ELSS Tax Saver Fund?"}
+{"timestamp": "2026-08-31 03:17:38,152", "name": "pipeline.query", "level": "INFO", "message": "Received query: Who is the fund manager of HDFC Large Cap Fund and what is their prior experience?"}
+{"timestamp": "2026-08-31 03:17:40,224", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the benchmark index for HDFC Multi Cap Fund?"}
+{"timestamp": "2026-08-31 03:17:41,838", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the AUM of HDFC Gold ETF Fund of Fund?"}
+{"timestamp": "2026-08-31 03:17:42,909", "name": "pipeline.query", "level": "INFO", "message": "Received query: Which of these 9 funds has the lowest expense ratio?"}
+{"timestamp": "2026-08-31 03:17:43,966", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the risk category of HDFC Small Cap Fund?"}
+{"timestamp": "2026-08-31 03:17:45,093", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the current NAV of HDFC Large Cap Fund?"}
+{"timestamp": "2026-08-31 03:17:55,162", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the dividend policy of HDFC Large Cap Fund?"}
+{"timestamp": "2026-08-31 03:18:25,151", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the minimum SIP amount for HDFC Mid Cap Fund?"}
+{"timestamp": "2026-08-31 03:18:27,387", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the expense ratio of HDFC Nifty 50 Index Fund?"}
+{"timestamp": "2026-08-31 03:18:28,119", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the exit load for HDFC ELSS Tax Saver Fund?"}
+{"timestamp": "2026-08-31 03:18:28,965", "name": "pipeline.query", "level": "INFO", "message": "Received query: Who is the fund manager of HDFC Large Cap Fund and what is their prior experience?"}
+{"timestamp": "2026-08-31 03:18:37,947", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the benchmark index for HDFC Multi Cap Fund?"}
+{"timestamp": "2026-08-31 03:18:53,829", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the AUM of HDFC Gold ETF Fund of Fund?"}
+{"timestamp": "2026-08-31 03:19:05,976", "name": "pipeline.query", "level": "INFO", "message": "Received query: Which of these 9 funds has the lowest expense ratio?"}
+{"timestamp": "2026-08-31 03:19:07,800", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the risk category of HDFC Small Cap Fund?"}
+{"timestamp": "2026-08-31 03:19:22,297", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the current NAV of HDFC Large Cap Fund?"}
+{"timestamp": "2026-08-31 03:19:28,315", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the dividend policy of HDFC Large Cap Fund?"}
+{"timestamp": "2026-08-31 03:20:09,059", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the minimum SIP amount for HDFC Mid Cap Fund?"}
+{"timestamp": "2026-08-31 03:20:10,098", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the expense ratio of HDFC Nifty 50 Index Fund?"}
+{"timestamp": "2026-08-31 03:20:10,682", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the exit load for HDFC ELSS Tax Saver Fund?"}
+{"timestamp": "2026-08-31 03:20:11,325", "name": "pipeline.query", "level": "INFO", "message": "Received query: Who is the fund manager of HDFC Large Cap Fund and what is their prior experience?"}
+{"timestamp": "2026-08-31 03:20:11,927", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the benchmark index for HDFC Multi Cap Fund?"}
+{"timestamp": "2026-08-31 03:20:12,571", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the AUM of HDFC Gold ETF Fund of Fund?"}
+{"timestamp": "2026-08-31 03:20:13,152", "name": "pipeline.query", "level": "INFO", "message": "Received query: Which of these 9 funds has the lowest expense ratio?"}
+{"timestamp": "2026-08-31 03:20:13,745", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the risk category of HDFC Small Cap Fund?"}
+{"timestamp": "2026-08-31 03:20:14,333", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the current NAV of HDFC Large Cap Fund?"}
+{"timestamp": "2026-08-31 03:20:14,887", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the dividend policy of HDFC Large Cap Fund?"}
+{"timestamp": "2026-08-31 03:23:02,995", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the minimum SIP amount for HDFC Mid Cap Fund?"}
+{"timestamp": "2026-08-31 03:23:23,558", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the minimum SIP amount for HDFC Mid Cap Fund?"}
+{"timestamp": "2026-08-31 03:23:26,409", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the expense ratio of HDFC Nifty 50 Index Fund?"}
+{"timestamp": "2026-08-31 03:23:28,291", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the exit load for HDFC ELSS Tax Saver Fund?"}
+{"timestamp": "2026-08-31 03:23:29,918", "name": "pipeline.query", "level": "INFO", "message": "Received query: Who is the fund manager of HDFC Large Cap Fund and what is their prior experience?"}
+{"timestamp": "2026-08-31 03:23:32,981", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the benchmark index for HDFC Multi Cap Fund?"}
+{"timestamp": "2026-08-31 03:23:35,537", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the AUM of HDFC Gold ETF Fund of Fund?"}
+{"timestamp": "2026-08-31 03:23:37,052", "name": "pipeline.query", "level": "INFO", "message": "Received query: Which of these 9 funds has the lowest expense ratio?"}
+{"timestamp": "2026-08-31 03:23:39,447", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the risk category of HDFC Small Cap Fund?"}
+{"timestamp": "2026-08-31 03:23:55,095", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the current NAV of HDFC Large Cap Fund?"}
+{"timestamp": "2026-08-31 03:24:06,347", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the dividend policy of HDFC Large Cap Fund?"}
+{"timestamp": "2026-08-31 03:27:41,854", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the minimum SIP amount for HDFC Mid Cap Fund?"}
+{"timestamp": "2026-08-31 03:27:44,033", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the expense ratio of HDFC Nifty 50 Index Fund?"}
+{"timestamp": "2026-08-31 03:27:45,025", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the exit load for HDFC ELSS Tax Saver Fund?"}
+{"timestamp": "2026-08-31 03:27:45,796", "name": "pipeline.query", "level": "INFO", "message": "Received query: Who is the fund manager of HDFC Large Cap Fund and what is their prior experience?"}
+{"timestamp": "2026-08-31 03:27:47,324", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the benchmark index for HDFC Multi Cap Fund?"}
+{"timestamp": "2026-08-31 03:27:49,232", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the AUM of HDFC Gold ETF Fund of Fund?"}
+{"timestamp": "2026-08-31 03:27:54,330", "name": "pipeline.query", "level": "INFO", "message": "Received query: Which of these 9 funds has the lowest expense ratio?"}
+{"timestamp": "2026-08-31 03:27:58,439", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the risk category of HDFC Small Cap Fund?"}
+{"timestamp": "2026-08-31 03:28:14,270", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the current NAV of HDFC Large Cap Fund?"}
+{"timestamp": "2026-08-31 03:28:18,728", "name": "pipeline.query", "level": "INFO", "message": "Received query: What is the dividend policy of HDFC Large Cap Fund?"}

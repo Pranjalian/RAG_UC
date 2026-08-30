@@ -75,7 +75,12 @@ def main():
 
     elif args.command == "evaluate":
         logger.info("Executing 'evaluate' command...")
-        print("Evaluate command not fully implemented yet.")
+        from src.evaluator import Evaluator
+        evaluator = Evaluator(config)
+        emb_provider = config.get("embedder", {}).get("provider", "gemini")
+        vs_provider = config.get("vector_store", {}).get("provider", "chroma")
+        exp_name = f"{emb_provider}_{vs_provider}"
+        evaluator.run_evaluation(experiment_name=exp_name)
         
     else:
         parser.print_help()

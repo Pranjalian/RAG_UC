@@ -1,0 +1,57 @@
+name: Scheduled RAG Ingestion Pipeline
+
+on:
+  schedule:
+    # Run at 00:00 every day (UTC)
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+    # Allow manual triggering from the Actions tab
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Required for committing changes back to the repo
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          # Required to trigger subsequent workflows if needed
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Ingestion Pipeline
+        env:
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: |
+          # Make sure PYTHONPATH includes the src directory
+          export PYTHONPATH=$PYTHONPATH:$(pwd)
+          python -m src.main ingest
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          
+          # Add only the data and vector_db directories
+          git add data/ vector_db/
+          
+          # Check if there are any changes to commit
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Auto-update RAG data: $(date -u)"
+            git push
+          fi

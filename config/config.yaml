@@ -1,0 +1,75 @@
+# config/config.yaml
+
+# ─── Scraper ────────────────────────────────────────────
+scraper:
+  output_dir: "data/rawdata"          # Path to store raw scraped data
+  request_delay_seconds: 2.5          # Delay between page fetches
+  request_timeout_seconds: 30
+  user_agent: "MutualFundFAQBot/1.0 (learning project)"
+  max_retries: 2
+
+# ─── Normalizer ─────────────────────────────────────────
+normalizer:
+  output_dir: "data/normalized"
+
+# ─── Change Detection ───────────────────────────────────
+change_detection:
+  hash_dir: "data/hashes"
+  algorithm: "sha256"
+
+# ─── Chunker ────────────────────────────────────────────
+chunker:
+  strategy: "section_aware"           # "section_aware" | "fixed_size"
+  fixed_size:
+    chunk_size: 500                   # characters
+    chunk_overlap: 50                 # characters
+  section_aware:
+    max_chunk_size: 1000              # max chars per chunk; split further if exceeded
+    overlap: 50
+
+# ─── Embedder ───────────────────────────────────────────
+embedder:
+  provider: "gemini"                  # "gemini" | "sentence_transformer" | "openai"
+  gemini:
+    model: "text-embedding-004"
+    batch_size: 32
+  sentence_transformer:
+    model: "all-MiniLM-L6-v2"
+    batch_size: 64
+  openai:
+    model: "text-embedding-3-small"
+    batch_size: 32
+
+# ─── Vector Store ───────────────────────────────────────
+vector_store:
+  provider: "chroma"                  # "chroma" | "faiss"
+  chroma:
+    persist_dir: "vector_db/chroma"
+    collection_name: "mutual_funds"
+  faiss:
+    index_dir: "vector_db/faiss"
+    index_type: "FlatIP"              # Inner Product (cosine after normalization)
+
+# ─── Retriever ──────────────────────────────────────────
+retriever:
+  top_k: 5
+  similarity_threshold: 0.65         # Discard chunks below this score
+  hybrid:
+    enabled: false                   # Enable keyword+vector hybrid search
+    keyword_weight: 0.3              # Weight for keyword (BM25) component
+
+# ─── Generator ──────────────────────────────────────────
+generator:
+  llm_provider: "groq"
+  model: "openai/gpt-oss-120b"
+  temperature: 0.1                   # Low temperature for factual answers
+  max_output_tokens: 1024
+
+# ─── Scheduler ──────────────────────────────────────────
+scheduler:
+  provider: "github_actions"
+  log_dir: "data/logs"
+
+# ─── Evaluator ──────────────────────────────────────────
+evaluator:
+  results_dir: "experiments"

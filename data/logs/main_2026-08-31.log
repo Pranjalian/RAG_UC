@@ -1,1 +1,21 @@
 {"timestamp": "2026-08-31 00:28:31,748", "name": "main", "level": "INFO", "message": "Executing 'scrape' command..."}
+{"timestamp": "2026-08-31 01:00:13,385", "name": "main", "level": "INFO", "message": "Executing 'ingest' command..."}
+{"timestamp": "2026-08-31 01:00:38,050", "name": "main", "level": "INFO", "message": "[HDFC Small Cap Fund] Changed sections: ['overview', 'returns', 'fund_managers', 'amc_details', 'holdings']"}
+{"timestamp": "2026-08-31 01:00:38,061", "name": "main", "level": "INFO", "message": "[HDFC Mid Cap Fund] Changed sections: ['overview', 'returns', 'fund_managers', 'amc_details', 'holdings']"}
+{"timestamp": "2026-08-31 01:00:38,070", "name": "main", "level": "INFO", "message": "[HDFC Flexi Cap Fund] Changed sections: ['overview', 'returns', 'fund_managers', 'amc_details', 'holdings']"}
+{"timestamp": "2026-08-31 01:00:38,082", "name": "main", "level": "INFO", "message": "[HDFC Multi Cap Fund] Changed sections: ['overview', 'returns', 'fund_managers', 'amc_details', 'holdings']"}
+{"timestamp": "2026-08-31 01:00:38,085", "name": "main", "level": "INFO", "message": "[HDFC Gold ETF Fund of Fund] Changed sections: ['overview', 'returns', 'fund_managers', 'amc_details', 'holdings']"}
+{"timestamp": "2026-08-31 01:00:38,097", "name": "main", "level": "INFO", "message": "[HDFC Large and Mid Cap Fund] Changed sections: ['overview', 'returns', 'fund_managers', 'amc_details', 'holdings']"}
+{"timestamp": "2026-08-31 01:00:38,102", "name": "main", "level": "INFO", "message": "[HDFC Nifty 50 Index Fund] Changed sections: ['overview', 'returns', 'fund_managers', 'amc_details', 'holdings']"}
+{"timestamp": "2026-08-31 01:00:38,108", "name": "main", "level": "INFO", "message": "[HDFC Large Cap Fund] Changed sections: ['overview', 'returns', 'fund_managers', 'amc_details', 'holdings']"}
+{"timestamp": "2026-08-31 01:00:38,115", "name": "main", "level": "INFO", "message": "[HDFC ELSS Tax Saver Fund] Changed sections: ['overview', 'returns', 'fund_managers', 'amc_details', 'holdings']"}
+{"timestamp": "2026-08-31 01:00:44,533", "name": "main", "level": "INFO", "message": "Executing 'ingest' command..."}
+{"timestamp": "2026-08-31 01:01:09,138", "name": "main", "level": "INFO", "message": "[HDFC Small Cap Fund] Changed sections: []"}
+{"timestamp": "2026-08-31 01:01:09,153", "name": "main", "level": "INFO", "message": "[HDFC Mid Cap Fund] Changed sections: []"}
+{"timestamp": "2026-08-31 01:01:09,172", "name": "main", "level": "INFO", "message": "[HDFC Flexi Cap Fund] Changed sections: []"}
+{"timestamp": "2026-08-31 01:01:09,190", "name": "main", "level": "INFO", "message": "[HDFC Multi Cap Fund] Changed sections: []"}
+{"timestamp": "2026-08-31 01:01:09,196", "name": "main", "level": "INFO", "message": "[HDFC Gold ETF Fund of Fund] Changed sections: []"}
+{"timestamp": "2026-08-31 01:01:09,211", "name": "main", "level": "INFO", "message": "[HDFC Large and Mid Cap Fund] Changed sections: []"}
+{"timestamp": "2026-08-31 01:01:09,219", "name": "main", "level": "INFO", "message": "[HDFC Nifty 50 Index Fund] Changed sections: []"}
+{"timestamp": "2026-08-31 01:01:09,225", "name": "main", "level": "INFO", "message": "[HDFC Large Cap Fund] Changed sections: []"}
+{"timestamp": "2026-08-31 01:01:09,233", "name": "main", "level": "INFO", "message": "[HDFC ELSS Tax Saver Fund] Changed sections: []"}

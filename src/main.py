@@ -44,8 +44,38 @@ def main():
         
     elif args.command == "ingest":
         logger.info("Executing 'ingest' command...")
-        print("Ingest command not fully implemented yet.")
         
+        from src.scraper.scraper import Scraper
+        from src.normalizer.normalizer import Normalizer
+        from src.change_detector.detector import ChangeDetector
+        import dataclasses
+        
+        scraper = Scraper(config.get("scraper", {}))
+        normalizer = Normalizer(config.get("normalizer", {}))
+        detector = ChangeDetector(config.get("change_detector", {}))
+        
+        # Scrape all configured funds
+        results = scraper.scrape_all()
+        
+        # Normalize and Detect Changes
+        for res in results:
+            if not res.success:
+                logger.warning(f"Skipping {res.fund_name} due to scrape failure.")
+                continue
+                
+            raw_data = dataclasses.asdict(res)
+            normalized = normalizer.normalize_fund(raw_data)
+            normalizer.persist_normalized(normalized)
+            
+            manifest, current_hashes = detector.detect_changes(normalized)
+            
+            changed_sections = [sec for sec, status in manifest.items() if status == "changed"]
+            logger.info(f"[{res.fund_name}] Changed sections: {changed_sections}")
+            
+            # Save hashes right away for Phase 3
+            detector.save_hashes(normalized.fund_id, current_hashes)
+            
+        print("Ingestion up to Change Detection completed.")
     elif args.command == "query":
         logger.info("Executing 'query' command...")
         if args.interactive:

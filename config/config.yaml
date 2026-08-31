@@ -29,7 +29,7 @@ chunker:
 
 # ─── Embedder ───────────────────────────────────────────
 embedder:
-  provider: "sentence_transformer"    # "gemini" | "sentence_transformer" | "openai"
+  provider: "gemini"                  # "gemini" | "sentence_transformer" | "openai"
   gemini:
     model: "gemini-embedding-2"
     batch_size: 32
@@ -42,7 +42,7 @@ embedder:
 
 # ─── Vector Store ───────────────────────────────────────
 vector_store:
-  provider: "faiss"                   # "chroma" | "faiss"
+  provider: "chroma"                  # "chroma" | "faiss"
   chroma:
     persist_dir: "vector_db/chroma"
     collection_name: "mutual_funds"

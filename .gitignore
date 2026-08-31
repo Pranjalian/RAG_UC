@@ -37,3 +37,7 @@ ENV/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Data and Databases
+data/
+vector_db/

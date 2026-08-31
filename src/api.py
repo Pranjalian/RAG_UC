@@ -1,10 +1,11 @@
 import re
 import logging
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, BackgroundTasks, Header, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+import os
 
-from src.pipeline import QueryPipeline
+from src.pipeline import QueryPipeline, IngestionPipeline
 from src.config_loader import load_config
 from src.logger import setup_logger
 
@@ -15,10 +16,14 @@ logger = setup_logger(__name__)
 # Initialize FastAPI
 app = FastAPI(title="Mutual Fund RAG API")
 
-# Allow requests from the Next.js frontend (e.g., localhost:3000)
+# Dynamic CORS configuration
+frontend_url = os.getenv("FRONTEND_URL", "").strip()
+allow_origins = [frontend_url] if frontend_url and frontend_url != "*" else ["*"]
+
+# Allow requests from the Next.js frontend (e.g., localhost:3000 or Vercel domain)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # In production, restrict to frontend domain
+    allow_origins=allow_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -75,4 +80,32 @@ async def chat_endpoint(request: ChatRequest):
         
     except Exception as e:
         logger.error(f"Error during query processing: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        # Sanitize internal server errors to avoid leaking stack traces
+        raise HTTPException(status_code=500, detail="An internal server error occurred while processing your request.")
+
+def run_ingestion_background():
+    """Background task to run the ingestion pipeline."""
+    try:
+        logger.info("Starting background ingestion pipeline...")
+        ingestion_pipeline = IngestionPipeline(config)
+        ingestion_pipeline.run()
+        logger.info("Background ingestion pipeline completed successfully.")
+    except Exception as e:
+        logger.error(f"Background ingestion failed: {e}")
+
+@app.post("/api/ingest")
+async def ingest_endpoint(background_tasks: BackgroundTasks, authorization: str = Header(None)):
+    """Trigger the ingestion pipeline in the background."""
+    admin_token = os.getenv("ADMIN_TOKEN")
+    
+    if not admin_token:
+        logger.error("ADMIN_TOKEN is not configured in the environment.")
+        raise HTTPException(status_code=500, detail="Server configuration error.")
+        
+    expected_header = f"Bearer {admin_token}"
+    if authorization != expected_header:
+        logger.warning("Unauthorized attempt to trigger ingestion.")
+        raise HTTPException(status_code=401, detail="Unauthorized")
+        
+    background_tasks.add_task(run_ingestion_background)
+    return {"message": "Ingestion pipeline started in the background. Check server logs for progress."}
